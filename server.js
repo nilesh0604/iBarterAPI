@@ -5,6 +5,8 @@ bodyParser = require('body-parser');
 
 mongoose.connect('mongodb://ibarteruser:ibarterpass@ds161175.mlab.com:61175/ibarter_db');
 
+var app =  express();
+
 app.set('port', (process.env.PORT || 5000));
 /*var openshiftConf = {};
 
@@ -18,7 +20,7 @@ if (typeof openshiftConf.ipaddress === "undefined") {
     openshiftConf.ipaddress = "127.0.0.1";
 };*/
 
-var app =  express();
+
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
