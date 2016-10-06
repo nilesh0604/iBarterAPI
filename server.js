@@ -33,6 +33,6 @@ app.use('/api', require('./routes/api'));
 
 
 app.listen(openshiftConf.port, openshiftConf.ipaddress, function() {
-    console.log('%s: Node server started on %s:%d ...',
+    console.log('%s: Node server server started on %s:%d ...',
     Date(Date.now()), openshiftConf.ipaddress, openshiftConf.port);
 });
