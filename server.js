@@ -5,8 +5,10 @@ bodyParser = require('body-parser');
 
 mongoose.connect('mongodb://ibarteruser:ibarterpass@ds161175.mlab.com:61175/ibarter_db');
 
+var app =  express();
 
-var openshiftConf = {};
+app.set('port', (process.env.PORT || 5000));
+/*var openshiftConf = {};
 
 openshiftConf.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
 openshiftConf.port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
@@ -16,9 +18,9 @@ if (typeof openshiftConf.ipaddress === "undefined") {
     //  allows us to run/test the app locally.
     console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
     openshiftConf.ipaddress = "127.0.0.1";
-};
+};*/
 
-var app =  express();
+
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
@@ -32,7 +34,11 @@ app.use(function(req, res, next) {
 app.use('/api', require('./routes/api'));
 
 
-app.listen(openshiftConf.port, openshiftConf.ipaddress, function() {
-    console.log('%s: Node server server started on %s:%d ...',
+/*app.listen(openshiftConf.port, openshiftConf.ipaddress, function() {
+    console.log('%s: Node server started on %s:%d ...',
     Date(Date.now()), openshiftConf.ipaddress, openshiftConf.port);
+});*/
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
