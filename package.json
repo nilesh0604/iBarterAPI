@@ -1,22 +1,22 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "iBarter API",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "iBarter API Service Provider",
   "keywords": [
-    "OpenShift",
+    "iBarter",
     "Node.js",
     "application",
     "openshift"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+    "name": "Nilesh Shinde",
+    "email": "Nilesh.0604@gmail.com",
+    "url": "http://www.NileshShinde.com/"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://www.NileshShinde.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "https://github.com/nilesh0604/iBarterAPI"
   },
   "engines": {
     "node": ">= 0.6.0",
