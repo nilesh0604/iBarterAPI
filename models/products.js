@@ -43,6 +43,15 @@ module.exports.updateProduct = function (product, options, callback){
 	Product.findOneAndUpdate(query, update, options, callback);
 };
 
+module.exports.updateImages = function (product, options, callback){
+	var query = {_id: product._id};
+	var update = {
+		images: product.images,
+		modifiedOn: Date.now()
+	};
+	Product.findOneAndUpdate(query, update, options, callback);
+};
+
 module.exports.removeProduct = function (id, callback){
 	var query = {_id: id};
 	Product.remove(query, callback);
