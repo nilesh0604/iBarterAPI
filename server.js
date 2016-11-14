@@ -34,7 +34,7 @@ var storage = cloudinaryStorage({
     filename: function(req, file, cb) {
         var datetimestamp = Date.now();
         cb(null, datetimestamp);
-        filesUploaded.push(datetimestamp);
+        filesUploaded.push(datetimestamp.toString()+'.'+file.originalname.split('.')[file.originalname.split('.').length -1]);
     }
 });
 
