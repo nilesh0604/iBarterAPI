@@ -1,5 +1,5 @@
 {
-  "name": "iBarter API",
+  "name": "iBarterAPI",
   "version": "1.0.0",
   "description": "iBarter API Service Provider",
   "keywords": [
@@ -26,10 +26,14 @@
     "body-parser": "^1.15.2",
     "cloudinary": "^1.4.4",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.3.0",
     "mongoose": "^4.5.9",
+    "mongoose-int32": "^0.2.0",
     "multer": "^1.2.0",
     "multer-storage-cloudinary": "^2.2.1",
-    "node-restful": "^0.2.5"
+    "node-restful": "^0.2.5",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1"
   },
   "devDependencies": {},
   "bundleDependencies": [],
