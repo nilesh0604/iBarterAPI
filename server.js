@@ -5,7 +5,7 @@ var express = require('express'),
     cloudinary = require('cloudinary'),
     multer = require('multer'),
     jwt = require('jsonwebtoken'),
-    Product = require('./models/products'),
+    passport = require('passport'),
     Users = require('./models/users');
 
 mongoose.connect('mongodb://ibarteruser:ibarterpass@ds161175.mlab.com:61175/ibarter_db');
@@ -16,6 +16,8 @@ var app = express();
 app.set('port', (process.env.PORT || 5000));
 
 app.set('superSecret', 'iloverobots'); // secret variable
+
+app.use(passport.initialize());
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -40,6 +42,7 @@ var storage = cloudinaryStorage({
 });
 
 
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token");
@@ -49,11 +52,13 @@ app.use(function(req, res, next) {
 
 //app.use('/api', require('./routes/api'));
 
+var apiRoutes = express.Router();
+
 app.get('/', function(req, res) {
-    res.send('Please use api/products or api/users');
+    res.send('Please use api/users');
 })
 
-app.post('/api/authenticate', function(req, res) {
+apiRoutes.post('/authenticate', function(req, res) {
     Users.authenticate(req.body, function(err, user) {
         if (err) throw err;
 
@@ -84,7 +89,8 @@ app.post('/api/authenticate', function(req, res) {
     });
 });
 
-/*app.use(function(req, res, next) {
+
+apiRoutes.get('/users', function(req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
     // decode token
@@ -97,7 +103,12 @@ app.post('/api/authenticate', function(req, res) {
             } else {
                 // if everything is good, save to request for use in other routes
                 req.decoded = decoded;
-                next();
+                Users.getUsers(function(err, users) {
+                    if (err) {
+                        throw err;
+                    }
+                    res.send(users);
+                });
             }
         });
 
@@ -111,113 +122,147 @@ app.post('/api/authenticate', function(req, res) {
         });
 
     }
-});*/
 
-app.get('/api/products', function(req, res) {
-    Product.getProducts(function(err, products) {
-        if (err) {
-            throw err;
-        }
-        res.send(products);
-    });
 });
 
-app.get('/api/products/:_id', function(req, res) {
-    Product.getProductById(req.params._id, function(err, product) {
-        if (err) {
-            throw err;
-        }
-        res.send(product);
-    });
+apiRoutes.get('/users/:_id', function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    // decode token
+    if (token) {
+
+        // verifies secret and checks exp
+        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+            if (err) {
+                return res.json({ success: false, message: 'Failed to authenticate token.' });
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                Users.getUsersById(req.params._id, function(err, user) {
+                    if (err) {
+                        throw err;
+                    }
+                    res.send(user);
+                });
+            }
+        });
+
+    } else {
+
+        // if there is no token
+        // return an error
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
+
+    }
+
 });
 
-app.post('/api/products', function(req, res) {
-    Product.addProduct(req.body, function(err, product) {
-        if (err) {
-            throw err;
-        }
-        res.send(product);
-    });
+apiRoutes.post('/users', function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    // decode token
+    if (token) {
+
+        // verifies secret and checks exp
+        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+            if (err) {
+                return res.json({ success: false, message: 'Failed to authenticate token.' });
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                Users.addUser(req.body, function(err, user) {
+                    if (err) {
+                        throw err;
+                    }
+                    res.send(user);
+                });
+            }
+        });
+
+    } else {
+
+        // if there is no token
+        // return an error
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
+
+    }
+
 });
 
-app.put('/api/products', function(req, res) {
-    Product.updateProduct(req.body, {}, function(err, product) {
-        if (err) {
-            throw err;
-        }
-        res.send(product);
-    });
+apiRoutes.put('/users', function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    // decode token
+    if (token) {
+
+        // verifies secret and checks exp
+        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+            if (err) {
+                return res.json({ success: false, message: 'Failed to authenticate token.' });
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                Users.updateUser(req.body, {}, function(err, user) {
+                    if (err) {
+                        throw err;
+                    }
+                    res.send(user);
+                });
+            }
+        });
+
+    } else {
+
+        // if there is no token
+        // return an error
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
+
+    }
+
 });
 
-app.delete('/api/products/:_id', function(req, res) {
-    Product.removeProduct(req.params._id, function(err, product) {
-        if (err) {
-            throw err;
-        }
-        res.send(product);
-    });
-});
+apiRoutes.delete('/users/:_id', function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-app.put('/api/updateImages', function(req, res) {
-    Product.updateImages(req.body, {}, function(err, product) {
-        if (err) {
-            throw err;
-        }
-        res.send(product);
-    });
-});
+    // decode token
+    if (token) {
 
+        // verifies secret and checks exp
+        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+            if (err) {
+                return res.json({ success: false, message: 'Failed to authenticate token.' });
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                Users.deleteUser(req.params._id, function(err, user) {
+                    if (err) {
+                        throw err;
+                    }
+                    res.send(user);
+                });
+            }
+        });
 
+    } else {
 
+        // if there is no token
+        // return an error
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
 
+    }
 
-
-
-
-
-app.get('/api/users', function(req, res) {
-    Users.getUsers(function(err, users) {
-        if (err) {
-            throw err;
-        }
-        res.send(users);
-    });
-});
-
-app.get('/api/users/:_id', function(req, res) {
-    Users.getUsersById(req.params._id, function(err, user) {
-        if (err) {
-            throw err;
-        }
-        res.send(user);
-    });
-});
-
-app.post('/api/users', function(req, res) {
-    Users.addUser(req.body, function(err, user) {
-        if (err) {
-            throw err;
-        }
-        res.send(user);
-    });
-});
-
-app.put('/api/users', function(req, res) {
-    Users.updateUser(req.body, {}, function(err, user) {
-        if (err) {
-            throw err;
-        }
-        res.send(user);
-    });
-});
-
-app.delete('/api/users/:_id', function(req, res) {
-    Users.deleteUser(req.params._id, function(err, user) {
-        if (err) {
-            throw err;
-        }
-        res.send(user);
-    });
 });
 
 
@@ -230,9 +275,11 @@ var upload = multer({ //multer settings
     storage: storage
 });
 
-app.post('/api/uploadImages', upload.single('file'), function (req, res) {
-  res.send(req.file);
+app.post('/api/uploadImages', upload.single('file'), function(req, res) {
+    res.send(req.file);
 });
+
+app.use('/api', apiRoutes);
 
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));

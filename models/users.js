@@ -51,11 +51,3 @@ module.exports.deleteUser = function(id, callback) {
     User.remove(query, callback);
 };
 
-module.exports.updateImages = function (product, options, callback){
-    var query = {_id: product._id};
-    var update = {
-        images: product.images,
-        modifiedOn: Date.now()
-    };
-    User.findOneAndUpdate(query, update, options, callback);
-};
