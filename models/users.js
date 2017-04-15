@@ -15,7 +15,7 @@ var userSchema = new mongoose.Schema({
 });
 
 
-var User = module.exports = restful.model('tripin_users', userSchema);
+var User = module.exports = restful.model('users', userSchema);
 
 module.exports.authenticate = function(user, callback) {
     User.findOne({ username: user.username }, callback);
