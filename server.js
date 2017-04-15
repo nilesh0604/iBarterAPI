@@ -7,6 +7,7 @@ var express = require('express'),
     jwt = require('jsonwebtoken'),
     passport = require('passport'),
     Users = require('./models/users');
+    Products = require('./models/products');
 
 mongoose.connect('mongodb://ibarteruser:ibarterpass@ds161175.mlab.com:61175/ibarter_db');
 
@@ -50,7 +51,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-//app.use('/api', require('./routes/api'));
 
 var apiRoutes = express.Router();
 
@@ -266,16 +266,74 @@ apiRoutes.delete('/users/:_id', function(req, res) {
 });
 
 
+apiRoutes.get('/products', function(req, res) {
+    Products.getProducts(function(err, products) {
+        if (err) {
+            throw err;
+        }
+        res.send(products);
+    });
+});
 
+apiRoutes.get('/products/:_id', function(req, res) {
+    Products.getProductById(req.params._id, function(err, product) {
+        if (err) {
+            throw err;
+        }
+        res.send(product);
+    });
+});
 
+apiRoutes.post('/products', function(req, res) {
+    Products.addProduct(req.body, function(err, product) {
+        if (err) {
+            throw err;
+        }
+        res.send(product);
+    });
+});
 
+apiRoutes.get('/products/:_id', function(req, res) {
+    Products.getProductById(req.params._id, function(err, product) {
+        if (err) {
+            throw err;
+        }
+        res.send(product);
+    });
+});
 
+apiRoutes.put('/products', function(req, res) {
+    Products.updateProduct(req.body, {}, function(err, product) {
+        if (err) {
+            throw err;
+        }
+        res.send(product);
+    });
+});
+
+apiRoutes.put('/updateImages', function(req, res) {
+    Products.updateImages(req.body, {}, function(err, product) {
+        if (err) {
+            throw err;
+        }
+        res.send(product);
+    });
+});
+
+apiRoutes.delete('/products/:_id', function(req, res) {
+    Products.removeProduct(req.params._id, function(err, product) {
+        if (err) {
+            throw err;
+        }
+        res.send(product);
+    });
+});
 
 var upload = multer({ //multer settings
     storage: storage
 });
 
-app.post('/api/uploadImages', upload.single('file'), function(req, res) {
+apiRoutes.post('/uploadImages', upload.single('file'), function(req, res) {
     res.send(req.file);
 });
 

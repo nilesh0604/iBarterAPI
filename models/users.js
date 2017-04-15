@@ -1,7 +1,5 @@
 var restful = require('node-restful');
 var mongoose = restful.mongoose;
-/*var Counters = require('../models/counter');
-var NumberInt = require('mongoose-int32');*/
 
 
 var userSchema = new mongoose.Schema({
