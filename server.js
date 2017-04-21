@@ -5,8 +5,6 @@ var express = require('express'),
     cloudinary = require('cloudinary'),
     multer = require('multer'),
     jwt = require('jsonwebtoken'),
-    passport = require('passport'),
-    expJwt = require('express-jwt'),
     Users = require('./models/users'),
     Products = require('./models/products');
 
