@@ -18,8 +18,6 @@ app.set('port', (process.env.PORT || 5000));
 
 app.set('superSecret', 'iloverobots'); // secret variable
 
-app.use(passport.initialize());
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
