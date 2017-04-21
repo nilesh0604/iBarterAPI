@@ -31,9 +31,7 @@
     "mongoose-int32": "^0.2.0",
     "multer": "^1.2.0",
     "multer-storage-cloudinary": "^2.2.1",
-    "node-restful": "^0.2.5",
-    "passport": "^0.3.2",
-    "passport-jwt": "^2.2.1"
+    "node-restful": "^0.2.5"
   },
   "devDependencies": {},
   "bundleDependencies": [],
